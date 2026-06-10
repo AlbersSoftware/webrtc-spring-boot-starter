@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: webrtc-spring-boot-starter
