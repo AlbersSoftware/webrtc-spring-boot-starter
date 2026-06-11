@@ -21,7 +21,7 @@ public class RoomEventBroadcaster {
     }
 
     // =====================================================
-    // CALL THIS WHEN SOMEONE JOINS A ROOM
+    // CALL WHEN SOMEONE JOINS A ROOM
     // =====================================================
     public void broadcastUserJoined(String roomId, String newClientId) {
 
@@ -41,4 +41,19 @@ public class RoomEventBroadcaster {
             sessionRegistry.sendMessage(clientId, message);
         }
     }
+
+
+    public void broadcastUserLeft(String roomId, String leavingClientId) {
+
+    Set<String> participants = roomManager.getParticipants(roomId);
+
+    SignalMessage message = new SignalMessage();
+    message.setType(SignalType.USER_LEFT);
+    message.setRoomId(roomId);
+    message.setSenderId(leavingClientId);
+
+    for (String clientId : participants) {
+        sessionRegistry.sendMessage(clientId, message);
+    }
+}
 }

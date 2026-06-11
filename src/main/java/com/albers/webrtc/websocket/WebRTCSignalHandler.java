@@ -4,23 +4,16 @@ import com.albers.webrtc.model.SignalMessage;
 import com.albers.webrtc.model.SignalType;
 import com.albers.webrtc.service.SessionRegistry;
 import com.albers.webrtc.service.SignalingService;
+import com.albers.webrtc.service.RoomManager;
+import com.albers.webrtc.events.RoomEventBroadcaster;
 import tools.jackson.databind.ObjectMapper;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
 import java.util.UUID;
 
-/**
- * WEBSOCKET TRANSPORT LAYER (SPRING MANAGED BEAN)
- *
- * This class:
- * - Handles WebSocket lifecycle events
- * - Assigns clientId on connection
- * - Delegates all logic to SignalingService
- *
- * IMPORTANT:
- * This is now a Spring @Component so dependencies are injected properly.
- */
 @Component
 public class WebRTCSignalHandler extends TextWebSocketHandler {
 
@@ -28,13 +21,23 @@ public class WebRTCSignalHandler extends TextWebSocketHandler {
     private final SignalingService signalingService;
     private final ObjectMapper objectMapper;
 
+    
+    private final RoomManager roomManager;
+    private final RoomEventBroadcaster roomEventBroadcaster;
+
     public WebRTCSignalHandler(SessionRegistry sessionRegistry,
                                SignalingService signalingService,
-                               ObjectMapper objectMapper) {
+                               ObjectMapper objectMapper,
+                               RoomManager roomManager,
+                               RoomEventBroadcaster roomEventBroadcaster) {
 
         this.sessionRegistry = sessionRegistry;
         this.signalingService = signalingService;
         this.objectMapper = objectMapper;
+
+        
+        this.roomManager = roomManager;
+        this.roomEventBroadcaster = roomEventBroadcaster;
     }
 
     // =========================================================
@@ -103,6 +106,17 @@ public class WebRTCSignalHandler extends TextWebSocketHandler {
         System.out.println("\n[DISCONNECT] clientId: " + clientId);
 
         if (clientId != null) {
+
+            String roomId = roomManager.findRoomByClient(clientId);
+
+            if (roomId != null) {
+
+                roomManager.leaveRoom(roomId, clientId);
+
+                
+                roomEventBroadcaster.broadcastUserLeft(roomId, clientId);
+            }
+
             sessionRegistry.removeSessionByClientId(clientId);
         }
 

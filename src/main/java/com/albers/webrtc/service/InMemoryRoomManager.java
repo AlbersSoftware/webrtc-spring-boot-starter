@@ -36,4 +36,15 @@ public class InMemoryRoomManager implements RoomManager {
     public boolean roomExists(String roomId) {
         return rooms.containsKey(roomId);
     }
+
+    @Override
+public String findRoomByClient(String clientId) {
+    for (var entry : rooms.entrySet()) {
+        if (entry.getValue().contains(clientId)) {
+            return entry.getKey();
+        }
+    }
+    return null;
+}
+
 }

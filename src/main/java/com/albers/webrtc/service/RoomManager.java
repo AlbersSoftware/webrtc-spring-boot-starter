@@ -11,4 +11,6 @@ public interface RoomManager {
     Set<String> getParticipants(String roomId);
 
     boolean roomExists(String roomId);
+
+    String findRoomByClient(String clientId);
 }
