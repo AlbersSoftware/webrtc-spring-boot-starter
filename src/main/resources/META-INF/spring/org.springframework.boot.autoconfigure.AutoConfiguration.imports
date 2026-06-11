@@ -1,0 +1,2 @@
+com.albers.webrtc.autoconfigure.WebRtcAutoConfiguration
+com.albers.webrtc.autoconfigure.WebRtcWebSocketAutoConfiguration

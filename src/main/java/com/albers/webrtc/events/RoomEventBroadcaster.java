@@ -4,11 +4,11 @@ import com.albers.webrtc.model.SignalMessage;
 import com.albers.webrtc.model.SignalType;
 import com.albers.webrtc.service.SessionRegistry;
 import com.albers.webrtc.service.RoomManager;
-import org.springframework.stereotype.Component;
+
 
 import java.util.Set;
 
-@Component
+
 public class RoomEventBroadcaster {
 
     private final SessionRegistry sessionRegistry;

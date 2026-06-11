@@ -8,13 +8,13 @@ import com.albers.webrtc.service.RoomManager;
 import com.albers.webrtc.events.RoomEventBroadcaster;
 import tools.jackson.databind.ObjectMapper;
 
-import org.springframework.stereotype.Component;
+
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.UUID;
 
-@Component
+
 public class WebRTCSignalHandler extends TextWebSocketHandler {
 
     private final SessionRegistry sessionRegistry;
